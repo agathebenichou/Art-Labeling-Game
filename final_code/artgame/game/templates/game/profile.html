@@ -1,0 +1,16 @@
+{% extends "game/base.html" %}
+
+{% block body %}
+
+  {% if user.is_authenticated %}
+  <div class="transbox"> 
+    <h1> Hello, {{ p.username }}! </h1>
+    <h2> Your total score is: {{p.total_score}} </h2>
+    <h2> Your single game high score is: {{p.high_score}} </h2>
+    <h2> You have played: {{p.games_played}} games</h2>
+  </div>
+  {% else %}
+    <h1> Please login to access your user profile or create an account </h1>
+    <a href="{% url 'login' %}
+  {% endif %}
+{% endblock %}

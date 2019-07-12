@@ -1,0 +1,21 @@
+{% extends "game/base.html" %}
+
+{% block body %}
+  <h1> Already a user? Log in! </h2>
+
+  {% if form.errors %}
+    <p> Your username and password did not match. Please try again. </p>
+  {% endif %}
+
+  <form align="center" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button id="loginButton" type="submit"> Login </button>
+  </form> <br>
+
+  <!-- goes to django default -->
+  <!--<h2 color="black"> Forgot your password? <a href="/accounts/password_reset"> Click to reset! </a> </h2>-->
+ 
+  <h2 color="black">Not yet a user? <a href="{% url 'game:register' %}"> Click</a> to register! </h2>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "game/base.html" %}
+
+{% block body %}
+
+<h1> Current Leaderboard </h1>
+<h4> These are the top 10 players in the game. </h4>
+
+<table align="center">
+  <tr>
+    <th>Rank</th>
+    <th>Username</th>
+    <th>Max Game</th>
+    <th>Total Score</th>
+  </tr>	
+  {% for Player in player_list %}
+  <tr>
+    <td>{{forloop.counter}}</td>
+  	<td>{{Player.username}}</td>
+  	<td>{{Player.high_score}}</td>
+  	<td>{{Player.total_score}}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

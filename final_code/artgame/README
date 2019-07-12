@@ -1,0 +1,10 @@
+Instructions for running Development Release for Second Checkpoint: v0.2
+
+1. Start virtual python environment:
+workon django
+
+2. Run django server:
+python manage.py runserver <optional port number>
+
+3. X11 forward a web browser to your local machine and visit 127.0.0.1:8000 (default)
+firefox 127.0.0.1:8000 (in an SSH session started with -X option)

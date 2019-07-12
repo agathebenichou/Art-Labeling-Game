@@ -1,0 +1,46 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'game/style.css' %}" />
+
+<div id="container">
+  {% if user.is_authenticated %}
+
+    <nav class="topnav">
+       <a class="active" href="/"> Home </a>
+       <a class="active" href="{% url 'game:initgame' %}"> Game </a>
+       <a class="active" href="{% url 'game:leaderboard' %}"> Leaderboard </a>
+       <a class="active" href="{% url 'game:about' %}"> About </a>     
+       <div class="dropdown">
+         <button class="dropbtn"> {{user.username}} 
+           <i class="fa fa-caret-down"></i>
+         </button>
+        <div class="dropdown-content">
+         <a href="{% url 'game:profile' %}">Profile</a>
+         <a href="/accounts/logout"> Logout </a> 
+        </div>
+       </div>       
+    </nav>
+
+  {% else %}
+
+    <nav class="topnav">
+       <a class="active" href="/"> Home </a>
+       <a class="active" href="{% url 'game:leaderboard' %}"> Leaderboard </a>
+       <a class="active" href="{% url 'game:about' %}"> About </a>
+       <a class="active" href="/accounts/login"> Signup/Login </a>
+    </nav>
+
+  {% endif %} 
+
+  <body>
+    <div id="body">
+      {% block body %}
+      {% endblock %}
+    </div>
+  </body>
+ 
+  <div id="footer">
+    <footer>
+      <p color="white"> Owned and operated by Lafayette College </p>
+    </footer>
+  </div>
+</div>

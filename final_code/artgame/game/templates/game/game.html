@@ -1,0 +1,131 @@
+{% extends "game/base.html" %}
+
+ <head>
+   <script src="http://code.jquery.com/jquery-3.3.1.js"></script>
+  </head>
+
+{% block body %}
+
+<div class="gamebox"> 
+  
+  <h1> Welcome to the Lafayette Image Labeling Game! </h1>
+ 	
+  <h3 align="center" color="black"> 
+        For each image displayed, generate relevant labels inside the text box and hit the "Submit" 
+        button or the ENTER key on your keyboard. You have 60 seconds for each image. Points will be
+	      awarded to you depending on the relevance of your generated label, this will be displayed in the label box on the left hand side of the screen. If you would like to label a certain artist, choose the artist from the dropdown menu on the right hand side fo the page and that artists photographs will be displayed to you. 
+  </h3> 
+  <!-- We need to take the timeRemaining variable and save it to the appropriate model   -->
+  
+  <h3> Seconds Remaining: <var id="timeRemaining"> {{curr_time}} </var> </h3>
+
+  <img id="artwork" border="black" width="350" height="{{ height }}" src="{{ image.artwork_image.url }}"> 
+ 
+  {% if error_flag == 1 %}
+    <h3 id="badword"> Duplicate keyword </h3>
+  {% elif error_flag == 2 %}
+    <h3 id="badword"> Unsavory keyword </h3>
+  {% elif error_flag == 3 %}
+    <h3 id="badword"> Space or numbers in keyword </h3>
+  {% endif %}
+
+  <textarea id = "myTextArea" rows ="20" cols= "40" readonly>  
+    {% for PlayerWord in p_words %}
+      {{ PlayerWord.word }} {{ PlayerWord.pts }}
+    {% endfor %}
+  </textarea>
+ 
+  <h3 id="playerStats"> Total Score: {{ p.total_score }} </h3> 
+  <h3 id="playerCurr"> Current Score: {{ p.curr_score }} </h3>
+
+  <form id="keywordForm" name="keywordForm" action="/game/" method="post">
+    {% csrf_token %}
+    {{ k_form }}
+    <input type="hidden" value="" id="timer" name="timer">
+    <button type="submit" onclick="submitTime();"> Submit </button>  
+  </form>
+  
+  <h3 id="artistLabel"> Choose Category: </h3>
+  <form id="catForm" name="catForm" action="/initgame/" method="post">
+    {% csrf_token %}
+    <select name="category" id="category" onchange="this.form.submit()">
+      {% for c in c_list %}
+        <option value="{{c.id}}"
+        {% if p.category == c %} selected {% endif %}>
+         {{ c.category_name }} <option>
+      {% endfor %}
+      <option value="-1"
+      {% if p.category is None %} selected {% endif %}> 
+      None <option>
+    </select> 
+
+  </form>
+
+
+<script>
+    var CCOUNT = {{curr_time}};    
+    var t, count, loop;
+    
+    window.onload = function() {
+      //var selectInput = document.getElementById("keywordInput");
+      //selectInput.focus();
+      //selectInput.select();
+      beginTimer();
+    }
+
+    window.onbeforeunload = function() {
+      
+    }
+    
+    function beginTimer(){
+        cdreset();
+        countdown();
+    }
+    
+    function cddisplay() {
+        // displays time and loop in span
+        document.getElementById("timeRemaining").innerHTML = count;
+    };
+    
+    function countdown() {
+        // starts countdown
+        cddisplay();
+
+        // if you hit zero, reset the timer to 60
+        if (count == 0) {
+            document.keywordForm.timer.value = count;
+            document.forms["keywordForm"].submit();            
+        // otherwise just continue to count down
+        } else {
+            count--;
+            t = setTimeout("countdown()", 1000);
+        }
+    };
+    
+    function cdpause() {
+        // pauses javascript timer, but not countdown
+        clearTimeout(t);
+    };
+    
+    function cdreset() {
+        // resets countdown, resets bot count and loop
+        cdpause();
+        count = CCOUNT;
+        loop = 1;
+        cddisplay();
+    };
+
+    function submitTime(){
+      document.keywordForm.timer.value = count;
+      document.forms["keywordForm"].submit();
+    }
+
+    
+
+    
+
+</script>
+</div> 
+
+{% endblock %}
+	
